@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Libs_OpenGL_Win">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../../../../Java/Libs_OpenGL_Win" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../../../../../Java/Libs_OpenGL_Win" recursive="false" />
+  </library>
+</component>
