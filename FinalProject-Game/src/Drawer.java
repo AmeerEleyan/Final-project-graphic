@@ -25,7 +25,7 @@ public class Drawer implements GLEventListener {
     private GL2 gl;
 
     private LinkedList linkedList;
-
+    private Stack stack;
     public void setAnimator(FPSAnimator animator) {
         this.animator = animator;
     }
@@ -34,6 +34,7 @@ public class Drawer implements GLEventListener {
     public void init(GLAutoDrawable glAutoDrawable) {
         this.gl = glAutoDrawable.getGL().getGL2();
         this.linkedList = new LinkedList(this.gl, this.animator);
+        stack = new Stack(this.gl);
         this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         this.gl.glClearColor(1f, 1f, 1f, 1.0f);
         this.gl.glMatrixMode(GL_PROJECTION);
@@ -71,19 +72,15 @@ public class Drawer implements GLEventListener {
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             this.gl.glClearColor(1f, 1f, 1f, 1.0f);
             gl.glLoadIdentity();
-            this.linkedList.initialize();
-            this.linkedList.removeAtLast();
+          //  this.linkedList.initialize();
+            //this.linkedList.insertAtLast();
+            stack.initialize();
+
 
            // this.linkedList.insertAtFirst();
             ///this.linkedList.insertAtLast();
 
         }
-
-//        new Pointer(gl, new DataStructure.Point(50, 50), Color.BLUE, DIRECTION.TOP);
-//        new Pointer(gl, new DataStructure.Point(50, 50), Color.BLUE, DIRECTION.RIGHT);
-//
-//        new Node(gl, new DataStructure.Point(70,70), Color.green,5);
-
     }
 
 

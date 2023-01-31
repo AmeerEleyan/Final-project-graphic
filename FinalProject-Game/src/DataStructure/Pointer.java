@@ -13,9 +13,15 @@ import java.awt.*;
 public class Pointer {
 
     private final GL2 gl;
-    private final Point startPoint;
-    private final DIRECTION direction;
+    private Point startPoint;
+    private DIRECTION direction;
     private static final int POINTER_LENGTH = 10;
+
+    public Pointer(GL2 gl, Color color) {
+        this.gl = gl;
+        this.gl.glColor3f(color.getRed() / 256f,
+                color.getGreen() / 256f, color.getBlue() / 256f);
+    }
 
     public Pointer(GL2 gl, Point startPoint, Color color, DIRECTION direction) {
         this.gl = gl;
@@ -72,7 +78,7 @@ public class Pointer {
     /**
      * Draw line using presnham  algorithm
      */
-    private void drawLine(Point start, Point end) {
+    public void drawLine(Point start, Point end) {
         float dx, dy, i, p;
         float stepX, stepY, twoDyDx, twoDy;
         float x, y;

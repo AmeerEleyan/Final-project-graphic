@@ -50,13 +50,13 @@ public class LinkedList {
     }
 
     public void insertAtFirst() {
-        Node newNode = new Node(gl, new Point(10, Y_POSITION), Color.black, null);
+        Node newNode = new Node(gl, new Point(10, Y_POSITION), Color.RED, null);
         newNode.draw();
         if (this.xMoveFirst < 15) {
             this.xMoveFirst += 1;
             new Pointer(gl, new Point(xMoveFirst, Y_POSITION), Color.blue, DIRECTION.RIGHT);
         } else {
-            newNode = new Node(gl, new Point(10, Y_POSITION), Color.black, DIRECTION.RIGHT);
+            newNode = new Node(gl, new Point(10, Y_POSITION), Color.RED, DIRECTION.RIGHT);
             newNode.draw();
             if (this.head.getStartPoint().x() > 10) {
                 this.headPoint = new Point(this.head.getStartPoint().x() - 1, this.head.getStartPoint().y());
@@ -83,8 +83,12 @@ public class LinkedList {
         }
     }
 
+    public void insertBetween(){
+
+    }
+
     public void insertAtLast() {
-        Node newNode = new Node(gl, new Point(90, Y_POSITION), Color.black, null);
+        Node newNode = new Node(gl, new Point(90, Y_POSITION), Color.RED, null);
         newNode.draw();
         if (this.xMoveLast < 75) {
             this.xMoveLast += 1;
@@ -98,7 +102,7 @@ public class LinkedList {
                 newNode = linkedList.getLast();
                 newNode.setDirection(DIRECTION.RIGHT);
                 newNode.draw();
-                newNode = new Node(gl, new Point(90, Y_POSITION), Color.black, null);
+                newNode = new Node(gl, new Point(90, Y_POSITION), Color.RED, null);
                 this.linkedList.add(newNode);
                 this.animator.stop();
             }

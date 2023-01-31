@@ -28,8 +28,17 @@ public class Node {
         this.gl.glColor3f(color.getRed() / 256f,
                 color.getGreen() / 256f, color.getBlue() / 256f);
         this.midPoint();
-        if (this.direction != null)
-            new Pointer(gl, new Point(this.center.x() + 5, this.center.y()), Color.blue, this.direction);
+        if (this.direction != null) {
+            if (this.direction == DIRECTION.RIGHT)
+                new Pointer(gl, new Point(this.center.x() + 5, this.center.y()), Color.blue, this.direction);
+            else if (this.direction == DIRECTION.LEFT)
+                new Pointer(gl, new Point(this.center.x() - 5, this.center.y()), Color.blue, this.direction);
+            else if (this.direction == DIRECTION.TOP)
+                new Pointer(gl, new Point(this.center.x(), this.center.y() + 5), Color.blue, this.direction);
+            else new Pointer(gl, new Point(this.center.x(), this.center.y() - 5), Color.blue, this.direction);
+
+        }
+
 
     }
 
