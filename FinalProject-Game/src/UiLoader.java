@@ -15,7 +15,7 @@ public class UiLoader extends JFrame {
 
     private JSlider animatorSpeed;
 
-    private int fbsSpeed = 40;
+    private int fbsSpeed = 10;
 
     private final JTextField simulationSpeed = createTextField("40");
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -36,13 +36,15 @@ public class UiLoader extends JFrame {
         GLCapabilities capabilities = new GLCapabilities(profile);
         this.glcanvas = new GLCanvas(capabilities);
         this.glcanvas.addGLEventListener(this.drawer);
-        this.glcanvas.setSize((int) this.screenSize.getWidth(), (int) (this.screenSize.getHeight() - 100));
+        this.glcanvas.setSize((int) 1100, (int) (this.screenSize.getHeight() - 100));
 
         final JFrame frame = new JFrame("");
         frame.getContentPane().add(glcanvas);
         frame.setSize(frame.getContentPane().getPreferredSize());
         frame.setVisible(true);
-
+        this.animator = new FPSAnimator(glcanvas, fbsSpeed, true);
+        this.drawer.setAnimator(animator);
+        this.animator.start();
 
         /*final GLProfile profile = GLProfile.get(GLProfile.GL2);
         final GLCapabilities capabilities = new GLCapabilities(profile);
@@ -125,7 +127,7 @@ public class UiLoader extends JFrame {
         mainPanel.add(inputsPanel);
 
         //mainPanel.add(this.animatorSpeed);
-       // mainPanel.add(this.startButton);
+        // mainPanel.add(this.startButton);
         //mainPanel.add(pauseButton);
         ///mainPanel.add(stopButton);
         ///mainPanel.add(resetButton);

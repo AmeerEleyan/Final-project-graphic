@@ -3,6 +3,7 @@
  * ID: 1191076
  * @created: 1/30/2023    5:57 PM
  */
+package DataStructure;
 
 import com.jogamp.opengl.GL2;
 
@@ -14,7 +15,6 @@ public class Pointer {
     private final GL2 gl;
     private final Point startPoint;
     private final DIRECTION direction;
-
     private static final int POINTER_LENGTH = 10;
 
     public Pointer(GL2 gl, Point startPoint, Color color, DIRECTION direction) {
@@ -24,6 +24,10 @@ public class Pointer {
         this.gl.glColor3f(color.getRed() / 256f,
                 color.getGreen() / 256f, color.getBlue() / 256f);
         this.drawPointer();
+    }
+
+    public Point getStartPoint() {
+        return startPoint;
     }
 
     /**
@@ -41,6 +45,8 @@ public class Pointer {
             end = new Point(this.startPoint.x() - POINTER_LENGTH, this.startPoint.y());
         }
         this.drawLine(this.startPoint, end);
+        this.drawLine(this.startPoint, end);
+        this.drawPointerHead(end);
         this.drawPointerHead(end);
     }
 

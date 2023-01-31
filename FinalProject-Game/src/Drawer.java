@@ -4,6 +4,8 @@
  * created: 12/20/2022    1:26 PM
  */
 
+import DataStructure.*;
+import DataStructure.Point;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
@@ -11,20 +13,27 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 import java.awt.*;
 import java.util.HashSet;
-import java.util.Stack;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 import static java.lang.Math.abs;
-import static jogamp.opengl.util.av.EGLMediaPlayerImpl.TextureType.GL;
 
 public class Drawer implements GLEventListener {
 
+    private FPSAnimator animator;
+
+    private boolean isPlaying = false;
     private GL2 gl;
+
+    private LinkedList linkedList;
+
+    public void setAnimator(FPSAnimator animator) {
+        this.animator = animator;
+    }
 
     @Override
     public void init(GLAutoDrawable glAutoDrawable) {
         this.gl = glAutoDrawable.getGL().getGL2();
+        this.linkedList = new LinkedList(this.gl, this.animator);
         this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         this.gl.glClearColor(1f, 1f, 1f, 1.0f);
         this.gl.glMatrixMode(GL_PROJECTION);
@@ -47,22 +56,39 @@ public class Drawer implements GLEventListener {
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-        this.gl.glClearColor(1f, 1f, 1f, 1.0f);
-        gl.glLoadIdentity();
-        new Pointer(gl, new Point(50, 50), Color.BLUE, DIRECTION.TOP);
-        new Pointer(gl, new Point(50, 50), Color.BLUE, DIRECTION.RIGHT);
 
-        new Node(gl, new Point(70,70), Color.green,5);
+        if (!isPlaying) {
+            gl.glBegin(GL2.GL_LINES);
+            gl.glColor3f(1f, 0, 1f);
+            gl.glVertex2i(0, 1);
+            gl.glVertex2i(100, 1);
+            gl.glVertex2i(100, 1);
+            gl.glVertex2i(100, 99);
+            gl.glEnd();
+            this.linkedList.initialize();
+            isPlaying = true;
+        } else {
+            gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+            this.gl.glClearColor(1f, 1f, 1f, 1.0f);
+            gl.glLoadIdentity();
+            this.linkedList.initialize();
+            this.linkedList.removeAtLast();
 
+           // this.linkedList.insertAtFirst();
+            ///this.linkedList.insertAtLast();
 
-        this.gl.glRasterPos2i(20,20);
+        }
+
+//        new Pointer(gl, new DataStructure.Point(50, 50), Color.BLUE, DIRECTION.TOP);
+//        new Pointer(gl, new DataStructure.Point(50, 50), Color.BLUE, DIRECTION.RIGHT);
+//
+//        new Node(gl, new DataStructure.Point(70,70), Color.green,5);
 
     }
 
 
-    private void fill(Color color, Polygon polygon, HashSet<Point> visitedPoints, int x, int y) {
-        Point p = new Point(x, y);
+    private void fill(Color color, Polygon polygon, HashSet<DataStructure.Point> visitedPoints, int x, int y) {
+        DataStructure.Point p = new Point(x, y);
         if (!visitedPoints.contains(p)) {
             visitedPoints.add(p);
             if (polygon.contains(x * 100, y * 100)) {
