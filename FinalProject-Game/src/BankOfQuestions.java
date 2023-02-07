@@ -1,43 +1,26 @@
-import java.util.Vector;
-
 /**
  * author: Ameer Eleyan
  * ID: 1191076
  * created: 1/29/2023    1:24 PM
  */
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class BankOfQuestions {
-    private Vector<Question> linkedListQuestions;
-    private Vector<Question> stackQuestions;
-    private Vector<Question> queueQuestions;
+    private final HashMap<String, HashMap<String, ArrayList<Question>>> bankQuestions;
 
     public BankOfQuestions() {
-        this.linkListQuestionsBank();
-        this.stackQuestionsBank();
-        this.queueQuestionsBank();
+        this.bankQuestions = new HashMap<>();
+        this.fillBankQuestions();
     }
 
-    private void linkListQuestionsBank() {
-        this.linkedListQuestions = new Vector<>();
+    // هان لازم تكتب كل الاسئلة والاجوبة
+    private void fillBankQuestions() {
+
     }
 
-    private void stackQuestionsBank() {
-        this.stackQuestions = new Vector<>();
-    }
-
-    private void queueQuestionsBank() {
-        this.queueQuestions = new Vector<>();
-    }
-
-    public Vector<Question> getLinkedListQuestions() {
-        return linkedListQuestions;
-    }
-
-    public Vector<Question> getStackQuestions() {
-        return stackQuestions;
-    }
-
-    public Vector<Question> getQueueQuestions() {
-        return queueQuestions;
+    public HashMap<String, HashMap<String, ArrayList<Question>>> getBankQuestions() {
+        return bankQuestions;
     }
 }

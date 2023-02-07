@@ -1,18 +1,18 @@
-import java.util.HashMap;
-
 /**
  * author: Ameer Eleyan
  * ID: 1191076
  * created: 1/29/2023    1:20 PM
  */
+import java.util.HashMap;
+
 
 public class Question {
     private String question;
-    private HashMap<String,Boolean> answers;
+    private HashMap<String,Boolean> options;
 
-    public Question(String question, HashMap<String, Boolean> answers) {
+    public Question(String question, HashMap<String, Boolean> options) {
         this.question = question;
-        this.answers = answers;
+        this.options = options;
     }
 
     public String getQuestion() {
@@ -23,11 +23,11 @@ public class Question {
         this.question = question;
     }
 
-    public HashMap<String, Boolean> getAnswers() {
-        return answers;
+    public HashMap<String, Boolean> getOptions() {
+        return options;
     }
 
-    public void setAnswers(HashMap<String, Boolean> answers) {
-        this.answers = answers;
+    public void setOptions(HashMap<String, Boolean> options) {
+        this.options = options;
     }
 }
