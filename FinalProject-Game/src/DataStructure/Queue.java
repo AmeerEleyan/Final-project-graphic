@@ -46,7 +46,7 @@ public class Queue {
         if (this.queue.size() > 4)
             return;
         if (xMoveEnqueue <= xTail) {
-            node = new Node(gl, new Point(++xMoveEnqueue, Y_POSITION), Color.WHITE, null);
+            node = new Node(gl, this.queue.size() + 1 + "", new Point(++xMoveEnqueue, Y_POSITION), Color.WHITE, null);
             node.draw();
         } else {
             node.draw();

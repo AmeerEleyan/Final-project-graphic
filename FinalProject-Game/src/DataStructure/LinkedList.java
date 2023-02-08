@@ -17,7 +17,7 @@ public class LinkedList {
 
     private final java.util.LinkedList<Node> linkedList;
 
-    private Pointer head,tail;
+    private Pointer head, tail;
 
     private Point headPoint, tailPoint;
 
@@ -36,35 +36,33 @@ public class LinkedList {
 
         this.linkedList = new java.util.LinkedList<>();
 
-        this.linkedList.add(new Node(gl, new Point(30, Y_POSITION), Color.black, DIRECTION.RIGHT));
-        this.linkedList.add(new Node(gl, new Point(50, Y_POSITION), Color.black, DIRECTION.RIGHT));
-        this.linkedList.add(new Node(gl, new Point(70, Y_POSITION), Color.black, null));
+        this.linkedList.add(new Node(gl, "2", new Point(30, Y_POSITION), Color.WHITE, DIRECTION.RIGHT));
+        this.linkedList.add(new Node(gl, "3", new Point(50, Y_POSITION), Color.WHITE, DIRECTION.RIGHT));
+        this.linkedList.add(new Node(gl, "4", new Point(70, Y_POSITION), Color.WHITE, null));
 
         //15 => radius(5)+pointer length(10)
         headPoint = new Point(30, Y_POSITION + 15);
         tailPoint = new Point(70, Y_POSITION + 15);
 
-        this.initialize();
+        // this.initialize();
     }
 
     public void insertAtFirst() {
-        Node newNode = new Node(gl, new Point(10, Y_POSITION), Color.RED, null);
+        Node newNode = new Node(gl, "1", new Point(10, Y_POSITION), Color.WHITE, null);
         newNode.draw();
         if (this.xMoveFirst < 15) {
             this.xMoveFirst += 1;
             new Pointer(gl, new Point(xMoveFirst, Y_POSITION), Color.blue, DIRECTION.RIGHT);
         } else {
-            newNode = new Node(gl, new Point(10, Y_POSITION), Color.RED, DIRECTION.RIGHT);
+            newNode = new Node(gl, "1", new Point(10, Y_POSITION), Color.WHITE, DIRECTION.RIGHT);
             newNode.draw();
             if (this.head.getStartPoint().x() > 10) {
                 this.headPoint = new Point(this.head.getStartPoint().x() - 1, this.head.getStartPoint().y());
             } else {
-                newNode.draw();
                 this.linkedList.addFirst(newNode);
                 this.animator.stop();
             }
         }
-
     }
 
     public void removeAtFirst() {
@@ -72,35 +70,32 @@ public class LinkedList {
             this.headPoint = new Point(this.head.getStartPoint().x() + 1, this.head.getStartPoint().y());
         } else {
             this.linkedList.removeFirst();
-
-            gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+            this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             this.gl.glClearColor(1f, 1f, 1f, 1.0f);
-            gl.glLoadIdentity();
-            initialize();
+            this.gl.glLoadIdentity();
+            this.initialize();
             this.animator.stop();
         }
     }
 
-    public void insertBetween(){
+    public void insertBetween() {
 
     }
 
     public void insertAtLast() {
-        Node newNode = new Node(gl, new Point(90, Y_POSITION), Color.RED, null);
+        Node newNode = new Node(gl, "5", new Point(90, Y_POSITION), Color.WHITE, null);
         newNode.draw();
         if (this.xMoveLast < 75) {
             this.xMoveLast += 1;
             new Pointer(gl, new Point(xMoveLast, Y_POSITION), Color.blue, DIRECTION.RIGHT);
         } else {
-            newNode.draw();
             new Pointer(gl, new Point(xMoveLast, Y_POSITION), Color.blue, DIRECTION.RIGHT);
             if (this.tail.getStartPoint().x() < 90) {
                 this.tailPoint = new Point(this.tail.getStartPoint().x() + 1, this.tail.getStartPoint().y());
             } else {
                 newNode = linkedList.getLast();
                 newNode.setDirection(DIRECTION.RIGHT);
-                newNode.draw();
-                newNode = new Node(gl, new Point(90, Y_POSITION), Color.RED, null);
+                newNode = new Node(gl, "5", new Point(90, Y_POSITION), Color.WHITE, null);
                 this.linkedList.add(newNode);
                 this.animator.stop();
             }
@@ -122,10 +117,10 @@ public class LinkedList {
                 } else {
                     this.linkedList.removeLast();
                     this.linkedList.getLast().setDirection(null);
-                    gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+                    this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
                     this.gl.glClearColor(1f, 1f, 1f, 1.0f);
-                    gl.glLoadIdentity();
-                    initialize();
+                    this.gl.glLoadIdentity();
+                    this.initialize();
                     this.animator.stop();
                 }
             }

@@ -10,12 +10,12 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
 import java.awt.*;
 import java.util.HashSet;
 
 import static com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
-import static java.lang.Math.abs;
 
 public class Drawer implements GLEventListener {
 
@@ -44,7 +44,7 @@ public class Drawer implements GLEventListener {
         // Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
     }
-
+    TextRenderer renderer;
     @Override
     public void dispose(GLAutoDrawable glAutoDrawable) {}
 
@@ -67,13 +67,14 @@ public class Drawer implements GLEventListener {
             gl.glVertex2i(100, 1);
             gl.glVertex2i(100, 99);
             gl.glEnd();
-           // this.linkedList.initialize();
+           this.linkedList.initialize();
             isPlaying = true;
         } else {
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             gl.glLoadIdentity();
-            this.queue.enqueue();
-
+            this.linkedList.initialize();
+           // this.linkedList.removeAtFirst();
+            this.linkedList.removeAtLast();
         }
     }
 

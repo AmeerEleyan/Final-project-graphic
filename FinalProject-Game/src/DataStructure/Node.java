@@ -6,6 +6,7 @@
 package DataStructure;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
 import java.awt.*;
 
@@ -14,12 +15,13 @@ public class Node {
     private final Color color;
     private final Point center;
     private static final int radius = 5;
-
     private DIRECTION direction;
 
-    public Node(GL2 gl, Point center, Color color, DIRECTION direction) {
+    private final String value;
+    public Node(GL2 gl, String value,Point center, Color color, DIRECTION direction) {
         this.gl = gl;
         this.center = center;
+        this.value=value;
         this.direction = direction;
         this.color = color;
     }
@@ -36,9 +38,12 @@ public class Node {
             else if (this.direction == DIRECTION.TOP)
                 new Pointer(gl, new Point(this.center.x(), this.center.y() + 5), Color.blue, this.direction);
             else new Pointer(gl, new Point(this.center.x(), this.center.y() - 5), Color.blue, this.direction);
-
         }
-
+        TextRenderer renderer = new TextRenderer(new Font("Times New Roman", Font.PLAIN, 10));
+        renderer.beginRendering(100, 100);
+        renderer.setColor(1.0f, 0, 0, 1);
+        renderer.draw(this.value, center.x()-radius+3, center.y()-radius+2);
+        renderer.endRendering();
 
     }
 

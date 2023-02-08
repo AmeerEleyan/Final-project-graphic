@@ -31,7 +31,7 @@ public class Stack {
         this.yMoveHead = 15;
         this.animator = animator;
         this.stack = new java.util.Stack<>();
-        this.node = new Node(gl, new Point(50, 90), Color.WHITE, null);
+        //this.node = new Node(gl, new Point(50, 90), Color.WHITE, null);
         this.drawContainer();
     }
 
@@ -42,11 +42,11 @@ public class Stack {
         }
         if (this.stack.size() >= 4) return;
         if (this.yNodePush >= ((this.stack.isEmpty()) ? 15 : this.stack.peek().getCenter().y() + 20)) {
-            this.node = new Node(this.gl, new Point(50, this.yNodePush--), Color.WHITE, null);
+            this.node = new Node(this.gl, "", new Point(50, this.yNodePush--), Color.WHITE, null);
             this.node.draw();
         } else {
             if (!this.stack.isEmpty()) {
-                this.node = new Node(this.gl, new Point(50, 1 + this.yNodePush), Color.WHITE, DIRECTION.BOTTOM);
+                this.node = new Node(this.gl, this.stack.size() + 1 + "", new Point(50, 1 + this.yNodePush), Color.WHITE, DIRECTION.BOTTOM);
             }
             this.node.draw();
             if (this.stack.isEmpty()) {
