@@ -15,7 +15,7 @@ public class UiLoader extends JFrame {
 
     private JSlider animatorSpeed;
 
-    private int fbsSpeed = 10;
+    private int fbsSpeed = 20;
 
     private final JTextField simulationSpeed = createTextField("40");
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

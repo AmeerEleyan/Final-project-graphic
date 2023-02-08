@@ -17,9 +17,7 @@ public class LinkedList {
 
     private final java.util.LinkedList<Node> linkedList;
 
-    private Pointer head;
-
-    private Pointer tail;
+    private Pointer head,tail;
 
     private Point headPoint, tailPoint;
 

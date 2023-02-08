@@ -26,6 +26,9 @@ public class Drawer implements GLEventListener {
 
     private LinkedList linkedList;
     private Stack stack;
+
+    private Queue queue;
+
     public void setAnimator(FPSAnimator animator) {
         this.animator = animator;
     }
@@ -34,18 +37,16 @@ public class Drawer implements GLEventListener {
     public void init(GLAutoDrawable glAutoDrawable) {
         this.gl = glAutoDrawable.getGL().getGL2();
         this.linkedList = new LinkedList(this.gl, this.animator);
-        stack = new Stack(this.gl);
+        this.stack = new Stack(this.gl, this.animator);
+        this.queue = new Queue(this.gl, this.animator);
         this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-        this.gl.glClearColor(1f, 1f, 1f, 1.0f);
         this.gl.glMatrixMode(GL_PROJECTION);
         // Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
     }
 
     @Override
-    public void dispose(GLAutoDrawable glAutoDrawable) {
-
-    }
+    public void dispose(GLAutoDrawable glAutoDrawable) {}
 
     @Override
     public void reshape(GLAutoDrawable glAutoDrawable, int i, int i1, int i2, int i3) {
@@ -66,19 +67,12 @@ public class Drawer implements GLEventListener {
             gl.glVertex2i(100, 1);
             gl.glVertex2i(100, 99);
             gl.glEnd();
-            this.linkedList.initialize();
+           // this.linkedList.initialize();
             isPlaying = true;
         } else {
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-            this.gl.glClearColor(1f, 1f, 1f, 1.0f);
             gl.glLoadIdentity();
-          //  this.linkedList.initialize();
-            //this.linkedList.insertAtLast();
-            stack.initialize();
-
-
-           // this.linkedList.insertAtFirst();
-            ///this.linkedList.insertAtLast();
+            this.queue.enqueue();
 
         }
     }
