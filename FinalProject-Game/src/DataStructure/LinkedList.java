@@ -78,8 +78,66 @@ public class LinkedList {
         }
     }
 
-    public void insertBetween() {
+    private int xMoveBetween = 5, xMoveTail = 0;
+    private boolean deleteLastNode = true;
 
+    public void insertBetween() {
+        Node newNode = new Node(gl, "5", new Point(xMoveBetween, Y_POSITION), Color.WHITE, null);
+        newNode.draw();
+        if (this.currPointer == null) {
+            this.currPointer = new Pointer(gl, headPoint, new Color(150, 75, 0), DIRECTION.BOTTOM);
+        }
+        Point currentPoint = new Point(this.currPointer.getStartPoint().x() + 1, this.currPointer.getStartPoint().y());
+        if (currentPoint.x() < this.linkedList.get(this.linkedList.size() - 2).getCenter().x()) {
+            currentPoint = new Point(this.currPointer.getStartPoint().x() + 1, this.currPointer.getStartPoint().y());
+            this.currPointer = new Pointer(gl, currentPoint, new Color(150, 75, 0), DIRECTION.BOTTOM);
+        } else {
+            this.currPointer = new Pointer(gl, new Point(this.currPointer.getStartPoint().x(), this.currPointer.getStartPoint().y()), new Color(150, 75, 0), DIRECTION.BOTTOM);
+            if (xMoveBetween < 60) {
+                xMoveBetween += 1;
+                newNode = new Node(gl, "5", new Point(xMoveBetween, Y_POSITION), Color.WHITE, null);
+                newNode.draw();
+            } else {
+                newNode = new Node(gl, "5", new Point(xMoveBetween, Y_POSITION), Color.WHITE, DIRECTION.RIGHT);
+                newNode.draw();
+                Node tail;
+                if (deleteLastNode) {
+                    tail = this.linkedList.removeLast();
+                    deleteLastNode = false;
+                    xMoveTail = tail.getCenter().x();
+                }
+                if (xMoveBetween < 70) {
+                    xMoveBetween += 1;
+                    xMoveTail += 1;
+                    tail = new Node(gl, "4", new Point(xMoveTail, Y_POSITION), Color.WHITE, null);
+                    tail.draw();
+                    this.tailPoint = new Point(this.tail.getStartPoint().x() + 1, this.tail.getStartPoint().y());
+                    newNode = new Node(gl, "5", new Point(xMoveBetween, Y_POSITION), Color.WHITE, null);
+                    newNode.draw();
+                } else {
+                    newNode = new Node(gl, "5", new Point(xMoveBetween, Y_POSITION), Color.WHITE, null);
+                    newNode.draw();
+                    if (xMoveTail < 90) {
+                        xMoveTail += 1;
+                        tail = new Node(gl, "4", new Point(xMoveTail, Y_POSITION), Color.WHITE, null);
+                        tail.draw();
+
+                        this.tailPoint = new Point(this.tail.getStartPoint().x() + 1, this.tail.getStartPoint().y());
+                    } else {
+                        tail = new Node(gl, "4", new Point(xMoveTail, Y_POSITION), Color.WHITE, null);
+                        tail.draw();
+                        newNode.setDirection(DIRECTION.RIGHT);
+                        linkedList.add(newNode);
+                        linkedList.add(tail);
+                        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+                        gl.glLoadIdentity();
+                        this.initialize();
+                        this.animator.stop();
+                    }
+                }
+
+            }
+        }
     }
 
     public void insertAtLast() {
@@ -129,7 +187,7 @@ public class LinkedList {
 
     public void initialize() {
         linkedList.forEach(Node::draw);
-        this.head = new Pointer(gl, this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
-        this.tail = new Pointer(gl, this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+        this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
+        this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
     }
 }

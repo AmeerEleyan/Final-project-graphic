@@ -10,7 +10,6 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
-import com.jogamp.opengl.util.awt.TextRenderer;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -29,6 +28,8 @@ public class Drawer implements GLEventListener {
 
     private Queue queue;
 
+    private ACTION actionType;
+
     public void setAnimator(FPSAnimator animator) {
         this.animator = animator;
     }
@@ -44,9 +45,10 @@ public class Drawer implements GLEventListener {
         // Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
     }
-    TextRenderer renderer;
+
     @Override
-    public void dispose(GLAutoDrawable glAutoDrawable) {}
+    public void dispose(GLAutoDrawable glAutoDrawable) {
+    }
 
     @Override
     public void reshape(GLAutoDrawable glAutoDrawable, int i, int i1, int i2, int i3) {
@@ -56,25 +58,44 @@ public class Drawer implements GLEventListener {
         this.gl.glMatrixMode(GL2.GL_MODELVIEW);
     }
 
+    public void setActionType(ACTION actionType) {
+        this.actionType = actionType;
+    }
+
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
 
         if (!isPlaying) {
-            gl.glBegin(GL2.GL_LINES);
-            gl.glColor3f(1f, 0, 1f);
-            gl.glVertex2i(0, 1);
-            gl.glVertex2i(100, 1);
-            gl.glVertex2i(100, 1);
-            gl.glVertex2i(100, 99);
-            gl.glEnd();
-           this.linkedList.initialize();
             isPlaying = true;
         } else {
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             gl.glLoadIdentity();
-            this.linkedList.initialize();
-           // this.linkedList.removeAtFirst();
-            this.linkedList.removeAtLast();
+            switch (this.actionType) {
+                case INSERT_AT_FITST -> {
+                    this.linkedList.initialize();
+                    this.linkedList.insertAtFirst();
+                }
+                case REMOVE_AT_FITST -> {
+                    this.linkedList.initialize();
+                    this.linkedList.removeAtFirst();
+                }
+                case INSERT_AT_LAST -> {
+                    this.linkedList.initialize();
+                    this.linkedList.insertAtLast();
+                }
+                case REMOVE_AT_LAST -> {
+                    this.linkedList.initialize();
+                    this.linkedList.removeAtLast();
+                }
+                case INSERT_AT_MIDDLE -> {
+                    this.linkedList.initialize();
+                    this.linkedList.insertBetween();
+                }
+                case PUSH -> this.stack.push();
+                case POP -> this.stack.pop();
+                case ENQUEUE -> this.queue.enqueue();
+                case DEQUEUE -> this.queue.dequeue();
+            }
         }
     }
 

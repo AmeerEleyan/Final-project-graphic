@@ -38,10 +38,10 @@ public class Queue {
     public void enqueue() {
         this.queue.forEach(Node::draw);
         if (this.headPoint != null) {
-            new Pointer(gl, this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
+            new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
         }
         if (!this.queue.isEmpty() && this.tailPoint != null) {
-            new Pointer(gl, this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+            new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
         }
         if (this.queue.size() > 4)
             return;
@@ -51,31 +51,37 @@ public class Queue {
         } else {
             node.draw();
             this.headPoint = new Point((this.queue.isEmpty()) ? 90 : (this.queue.peek().getCenter().x()), Y_POSITION + 15);
-            this.head = new Pointer(gl, this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
+            this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
             if (this.queue.isEmpty()) {
                 this.tailPoint = new Point(this.tailPoint.x(), Y_POSITION + 15);
-                this.tail = new Pointer(gl, this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+                if (this.headPoint.x() == this.tailPoint.x()) {
+                    Point point = new Point(this.tailPoint.x() + 4, this.tailPoint.y());
+                    this.tail = new Pointer(gl, "Tail", point, Color.MAGENTA, DIRECTION.BOTTOM);
+                } else {
+                    this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+                }
                 this.queue.add(node);
                 xMoveEnqueue = 10;
                 xTail -= 20;
-                //this.animator.pause();
+                this.animator.pause();
             } else {
                 this.queue.getLast().setDirection(DIRECTION.LEFT);
                 if (this.tailPoint.x() > xTail + 1) {
-                    this.tail = new Pointer(gl, this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+                    this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
                     this.tailPoint = new Point(this.tailPoint.x() - 1, Y_POSITION + 15);
                 } else {
                     this.queue.add(node);
                     xMoveEnqueue = 10;
                     xTail -= 20;
+                    this.animator.pause();
                 }
             }
         }
     }
 
     public void dequeue() {
-        this.head = new Pointer(gl, this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
-        this.tail = new Pointer(gl, this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+        this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
+        this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
         this.queue.forEach(Node::draw);
         if (this.queue.isEmpty()) return;
         Node temp = this.queue.poll();
@@ -88,13 +94,14 @@ public class Queue {
             this.queue.addFirst(temp);
             if (this.headPoint.x() > nextNode) {
                 this.headPoint = new Point(this.headPoint.x() - 1, Y_POSITION + 15);
-                this.head = new Pointer(gl, this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
+                this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
             } else {
+                this.animator.pause();
                 this.queue.poll();
                 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
                 gl.glLoadIdentity();
-                this.head = new Pointer(gl, this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
-                this.tail = new Pointer(gl, this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+                this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
+                this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
                 this.queue.forEach(Node::draw);
             }
         }

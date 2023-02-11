@@ -38,11 +38,11 @@ public class Stack {
     public void push() {
         this.drawCurrentStack();
         if (this.headPoint != null) {
-            this.head = new Pointer(this.gl, this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
+            this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
         }
         if (this.stack.size() >= 4) return;
         if (this.yNodePush >= ((this.stack.isEmpty()) ? 15 : this.stack.peek().getCenter().y() + 20)) {
-            this.node = new Node(this.gl, "", new Point(50, this.yNodePush--), Color.WHITE, null);
+            this.node = new Node(this.gl, this.stack.size() + 1 + "", new Point(50, this.yNodePush--), Color.WHITE, null);
             this.node.draw();
         } else {
             if (!this.stack.isEmpty()) {
@@ -53,15 +53,15 @@ public class Stack {
                 this.headPoint = new Point(node.getCenter().x() - 15, this.yMoveHead);
                 this.stack.push(node);
                 this.yNodePush = 90;
-                this.head = new Pointer(this.gl, this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
-                // this.animator.pause();
+                this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
+                this.animator.pause();
             } else {
                 if (this.yMoveHead < this.node.getCenter().y()) {
                     this.headPoint = new Point(this.node.getCenter().x() - 15, ++this.yMoveHead);
                 } else {
                     this.stack.push(this.node);
                     this.yNodePush = 90;
-                    this.head = new Pointer(this.gl, this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
+                    this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
                     if (this.stack.size() == 4) {
                         this.animator.pause();
                     }
@@ -83,12 +83,12 @@ public class Stack {
         temp.draw();
         if (this.yMoveHead > y) {
             this.headPoint = new Point(this.node.getCenter().x() - 15, --this.yMoveHead);
-            this.head = new Pointer(this.gl, this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
+            this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
         } else {
             this.stack.pop();
             this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             this.gl.glLoadIdentity();
-            this.head = new Pointer(this.gl, this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
+            this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
             this.animator.pause();
             this.drawCurrentStack();
         }

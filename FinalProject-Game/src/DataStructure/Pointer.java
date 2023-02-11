@@ -6,6 +6,7 @@
 package DataStructure;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
 import java.awt.*;
 
@@ -30,6 +31,27 @@ public class Pointer {
         this.gl.glColor3f(color.getRed() / 256f,
                 color.getGreen() / 256f, color.getBlue() / 256f);
         this.drawPointer();
+    }
+
+    public Pointer(GL2 gl, String title, Point startPoint, Color color, DIRECTION direction) {
+        this.gl = gl;
+        this.startPoint = startPoint;
+        this.direction = direction;
+        this.gl.glColor3f(color.getRed() / 256f,
+                color.getGreen() / 256f, color.getBlue() / 256f);
+        this.drawPointer();
+        TextRenderer renderer = new TextRenderer(new Font("Times New Roman", Font.PLAIN, 32));
+        renderer.beginRendering(1000, 1000);
+        renderer.setColor(color.getRed() / 256f,
+                color.getGreen() / 256f, color.getBlue() / 256f, 1);
+        int x = (startPoint.x() * 10) - 25;
+        int y = (startPoint.y() * 10) + 10;
+        if (direction == DIRECTION.RIGHT) {
+            x -= 50;
+            y -= 20;
+        }
+        renderer.draw(title, x, y);
+        renderer.endRendering();
     }
 
     public Point getStartPoint() {

@@ -3,12 +3,13 @@
  * ID: 1191076
  * created: 1/29/2023    1:20 PM
  */
+
 import java.util.HashMap;
 
 
 public class Question {
     private String question;
-    private HashMap<String,Boolean> options;
+    private HashMap<String, Boolean> options;
 
     public Question(String question, HashMap<String, Boolean> options) {
         this.question = question;
