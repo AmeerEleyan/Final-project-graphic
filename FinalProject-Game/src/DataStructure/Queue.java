@@ -5,6 +5,7 @@
  */
 package DataStructure;
 
+import Interface.UiLoader;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.FPSAnimator;
 
@@ -46,10 +47,9 @@ public class Queue {
             new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
         }
         if (!this.queue.isEmpty() && this.queue.getLast().getCenter().x() == 11) {
-            JOptionPane.showMessageDialog(null,
-                    "New node out of range, please reset view"
-                    , "Warning Message", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "The new node out of view range", "Warning Message", JOptionPane.WARNING_MESSAGE);
             this.animator.pause();
+            this.handleResetButtons();
             return;
         }
         if (xMoveEnqueue <= xTail) {
@@ -72,6 +72,7 @@ public class Queue {
                 xMoveEnqueue = 2;
                 xTail -= 20;
                 this.animator.pause();
+                this.handleResetButtons();
             } else {
                 this.queue.getLast().setDirection(DIRECTION.LEFT);
                 if (this.tailPoint.x() > xTail + 1) {
@@ -82,6 +83,7 @@ public class Queue {
                     xMoveEnqueue = 2;
                     xTail -= 20;
                     this.animator.pause();
+                    this.handleResetButtons();
                 }
             }
         }
@@ -90,9 +92,7 @@ public class Queue {
 
     public void dequeue() {
         if (this.queue.isEmpty()) {
-            JOptionPane.showMessageDialog(null,
-                    "Can't dequeue, the queue is empty"
-                    , "Warning Message", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Can't dequeue, the queue is empty", "Warning Message", JOptionPane.WARNING_MESSAGE);
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             gl.glLoadIdentity();
             this.animator.pause();
@@ -108,6 +108,7 @@ public class Queue {
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             gl.glLoadIdentity();
             this.animator.pause();
+            this.handleResetButtons();
             restQueue();
         } else {
             int nextNode = this.queue.peek().getCenter().x();
@@ -117,6 +118,7 @@ public class Queue {
                 this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
             } else {
                 this.animator.pause();
+                this.handleResetButtons();
                 this.queue.poll();
                 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
                 gl.glLoadIdentity();
@@ -129,6 +131,12 @@ public class Queue {
                 }
             }
         }
+    }
+
+    private void handleResetButtons() {
+        UiLoader.pauseButton.setEnabled(false);
+        UiLoader.runButton.setEnabled(true);
+        UiLoader.takeExamButton.setEnabled(true);
     }
 
     private void restQueue() {

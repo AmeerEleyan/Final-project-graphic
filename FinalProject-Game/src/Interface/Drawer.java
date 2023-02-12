@@ -4,6 +4,8 @@
  * created: 12/20/2022    1:26 PM
  */
 
+package Interface;
+
 import DataStructure.*;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -16,8 +18,6 @@ import static com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 public class Drawer implements GLEventListener {
 
     private FPSAnimator animator;
-
-    private boolean isPlaying = false;
     private GL2 gl;
 
     private LinkedList linkedList;
@@ -55,49 +55,51 @@ public class Drawer implements GLEventListener {
         this.gl.glMatrixMode(GL2.GL_MODELVIEW);
     }
 
+    public void restLinkedList() {
+        this.linkedList.resetLinkedList();
+        this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+        this.gl.glLoadIdentity();
+        this.animator.pause();
+    }
+
     public void setActionType(ACTION actionType) {
         this.actionType = actionType;
     }
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
-
-        if (!isPlaying) {
-            isPlaying = true;
-        } else {
-            gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-            gl.glLoadIdentity();
-            switch (this.actionType) {
-                case INSERT_AT_FITST -> {
-                    this.linkedList.resetLinkedList();
-                    this.linkedList.initialize();
-                    this.linkedList.insertAtFirst();
-                }
-                case REMOVE_AT_FITST -> {
-                    this.linkedList.resetLinkedList();
-                    this.linkedList.initialize();
-                    this.linkedList.removeAtFirst();
-                }
-                case INSERT_AT_LAST -> {
-                    this.linkedList.resetLinkedList();
-                    this.linkedList.initialize();
-                    this.linkedList.insertAtLast();
-                }
-                case REMOVE_AT_LAST -> {
-                    this.linkedList.resetLinkedList();
-                    this.linkedList.initialize();
-                    this.linkedList.removeAtLast();
-                }
-                case INSERT_AT_MIDDLE -> {
-                    this.linkedList.resetLinkedList();
-                    this.linkedList.initialize();
-                    this.linkedList.insertBetween();
-                }
-                case PUSH -> this.stack.push();
-                case POP -> this.stack.pop();
-                case ENQUEUE -> this.queue.enqueue();
-                case DEQUEUE -> this.queue.dequeue();
-            }
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+        gl.glLoadIdentity();
+        if (this.actionType == null) {
+            this.linkedList.initialize();
+            return;
         }
+        switch (this.actionType) {
+            case INSERT_AT_FITST -> {
+                this.linkedList.initialize();
+                this.linkedList.insertAtFirst();
+            }
+            case REMOVE_AT_FITST -> {
+                this.linkedList.initialize();
+                this.linkedList.removeAtFirst();
+            }
+            case INSERT_AT_LAST -> {
+                this.linkedList.initialize();
+                this.linkedList.insertAtLast();
+            }
+            case REMOVE_AT_LAST -> {
+                this.linkedList.initialize();
+                this.linkedList.removeAtLast();
+            }
+            case INSERT_AT_MIDDLE -> {
+                this.linkedList.initialize();
+                this.linkedList.insertBetween();
+            }
+            case PUSH -> this.stack.push();
+            case POP -> this.stack.pop();
+            case ENQUEUE -> this.queue.enqueue();
+            case DEQUEUE -> this.queue.dequeue();
+        }
+
     }
 }

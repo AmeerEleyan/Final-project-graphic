@@ -5,6 +5,7 @@
  */
 package DataStructure;
 
+import Interface.UiLoader;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.FPSAnimator;
 
@@ -41,10 +42,9 @@ public class Stack {
             this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
         }
         if (!this.stack.isEmpty() && this.stack.peek().getCenter().y() == 75) {
-            JOptionPane.showMessageDialog(null,
-                    "New node out of range, please reset view"
-                    , "Warning Message", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "The new node out of view range", "Warning Message", JOptionPane.WARNING_MESSAGE);
             this.animator.pause();
+            this.handleResetButtons();
             return;
         }
         if (this.yNodePush >= ((this.stack.isEmpty()) ? 15 : this.stack.peek().getCenter().y() + 20)) {
@@ -58,17 +58,13 @@ public class Stack {
             if (this.stack.isEmpty()) {
                 this.headPoint = new Point(node.getCenter().x() - 15, this.yMoveHead);
                 this.stack.push(node);
-                this.yNodePush = 90;
-                this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
-                this.animator.pause();
+                handleFinishSimulation();
             } else {
                 if (this.yMoveHead < this.node.getCenter().y()) {
                     this.headPoint = new Point(this.node.getCenter().x() - 15, ++this.yMoveHead);
                 } else {
                     this.stack.push(this.node);
-                    this.yNodePush = 90;
-                    this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
-                    this.animator.pause();
+                    handleFinishSimulation();
                 }
             }
         }
@@ -76,10 +72,10 @@ public class Stack {
 
     public void pop() {
         if (this.stack.isEmpty()) {
-            JOptionPane.showMessageDialog(null,
-                    "Can't pop, the stack is empty"
-                    , "Warning Message", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Can't pop, the stack is empty", "Warning Message", JOptionPane.WARNING_MESSAGE);
             this.animator.pause();
+            UiLoader.pauseButton.setEnabled(false);
+            UiLoader.runButton.setEnabled(true);
             return;
         }
         this.drawCurrentStack();
@@ -90,6 +86,7 @@ public class Stack {
             this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             this.gl.glLoadIdentity();
             this.animator.pause();
+            this.handleResetButtons();
             return;
         }
         int y = this.stack.peek().getCenter().y();
@@ -104,8 +101,22 @@ public class Stack {
             this.gl.glLoadIdentity();
             this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
             this.animator.pause();
+            this.handleResetButtons();
             this.drawCurrentStack();
         }
+    }
+
+    private void handleFinishSimulation() {
+        this.yNodePush = 90;
+        this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
+        this.animator.pause();
+        this.handleResetButtons();
+    }
+
+    private void handleResetButtons() {
+        UiLoader.pauseButton.setEnabled(false);
+        UiLoader.runButton.setEnabled(true);
+        UiLoader.takeExamButton.setEnabled(true);
     }
 
     private void drawCurrentStack() {

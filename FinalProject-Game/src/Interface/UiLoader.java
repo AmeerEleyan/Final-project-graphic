@@ -3,6 +3,7 @@
  * ID: 1190478, 1191076
  * created: 2/12/2023    8:26 PM
  */
+package Interface;
 
 import DataStructure.ACTION;
 import com.jogamp.opengl.GLCapabilities;
@@ -21,35 +22,27 @@ import java.util.Objects;
 
 public class UiLoader {
 
-
-    private JFrame frame;
     private JLabel questionLabel;
-    private JRadioButton answer1;
-    private JRadioButton answer2;
-    private JRadioButton answer3;
+    private JRadioButton answer1, answer2, answer3;
     private JButton nextButton;
+    public static JButton pauseButton, runButton, takeExamButton;
 
     private final String[] items = {"Linked list", "Stack", "Queue"};
 
     private final DefaultComboBoxModel<String> actionModel = new DefaultComboBoxModel<>();
     private final JComboBox<String> dataStructureBox = new JComboBox<>(items);
     private final JComboBox<String> actionBox = new JComboBox<>(actionModel);
-    private final JButton runButton = createButton("Run");
-    private final JButton takeExamButton = createButton("Take exam");
 
-    private int currentQuestionIndex = 0;
-    private int correctAnswerNumber = 0;
-    private String actionType;
-    private String dataStructureType;
-    private int counterOfLinkedList = 1;
-    private int counterOfStack = 0;
-    private int counterOfQueue = 0;
+    private int currentQuestionIndex = 0, correctAnswerNumber = 0;
+
+    private String dataStructureType, actionType;
+    private int counterOfLinkedList = 1, counterOfStack = 0, counterOfQueue = 0;
     private FPSAnimator animator;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     private final BankOfQuestions bankOfQuestions = new BankOfQuestions();
     private final Font font = new Font("Serif", Font.BOLD, 16);
-    Drawer drawer;
+    private Drawer drawer;
 
     public static void main(String[] args) {
         Runnable runnable = () -> new UiLoader().initialization();
@@ -57,7 +50,8 @@ public class UiLoader {
     }
 
     private void initialization() {
-
+        runButton = createButton("Run");
+        takeExamButton = createButton("Take exam");
         JPanel comboPanel = new JPanel(new GridBagLayout());
         comboPanel.setBackground(Color.WHITE);
         comboPanel.setBorder(BorderFactory.createTitledBorder("Data structure"));
@@ -89,16 +83,22 @@ public class UiLoader {
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.ipady = 20;
         actionBox.setPrototypeDisplayValue("Insert at first  ");
-        fillComboBoxAction(Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString(), this.actionBox);
 
-        dataStructureBox.addActionListener(ae -> fillComboBoxAction(Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString(), this.actionBox));
+        fillComboBoxAction(Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString(), this.actionBox);
+        dataStructureBox.setSelectedIndex(0);
+        actionBox.setSelectedIndex(0);
+        dataStructureBox.addActionListener(ae -> {
+            fillComboBoxAction(Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString(), this.actionBox);
+            takeExamButton.setEnabled(false);
+        });
+
         comboPanel.add(actionBox, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = -1;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.ipady = 20;
-        comboPanel.add(this.runButton, gridBagConstraints);
+        comboPanel.add(runButton, gridBagConstraints);
         runButton.addActionListener(a -> {
             this.run();
             if (this.animator.isPaused()) {
@@ -106,14 +106,35 @@ public class UiLoader {
             } else {
                 this.animator.start();
             }
+            runButton.setEnabled(false);
+            pauseButton.setEnabled(true);
         });
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = -1;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.ipady = 20;
-        comboPanel.add(this.takeExamButton, gridBagConstraints);
+        comboPanel.add(takeExamButton, gridBagConstraints);
+        takeExamButton.setEnabled(false);
         takeExamButton.addActionListener(ab -> takeExamWindow());
+
+        pauseButton = this.createButton("Pause");
+        pauseButton.setEnabled(false);
+        pauseButton.addActionListener(e -> {
+            if (this.animator.isPaused()) {
+                this.animator.resume();
+                pauseButton.setText("Pause");
+            } else {
+                this.animator.pause();
+                pauseButton.setText("Resume");
+                runButton.setEnabled(false);
+            }
+        });
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = -1;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.ipady = 20;
+        comboPanel.add(pauseButton, gridBagConstraints);
 
         this.drawer = new Drawer();
 
@@ -122,6 +143,19 @@ public class UiLoader {
         GLCanvas glcanvas = new GLCanvas(capabilities);
         glcanvas.addGLEventListener(drawer);
         glcanvas.setSize(1100, (int) (this.screenSize.getHeight() - 90));
+
+        actionBox.addActionListener(e -> {
+            takeExamButton.setEnabled(false);
+            if (Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString().equals("Linked list")) {
+                if (this.drawer != null) {
+                    this.animator.resume();
+                    this.drawer.setActionType(null);
+                    this.drawer.restLinkedList();
+                    glcanvas.revalidate();
+                }
+            }
+        });
+
 
         comboPanel.setSize(new Dimension(100, 50));
 
@@ -233,7 +267,6 @@ public class UiLoader {
 
                     fillComboBoxAction(dataStructureType, actionBox);
                     correctAnswerNumber = 0;
-                    frame.dispose();
                 }
             }
         });
@@ -261,7 +294,7 @@ public class UiLoader {
         southPanel.setLayout(new BorderLayout());
         southPanel.add(nextButton, BorderLayout.EAST);
 
-        frame = new JFrame("Exam Questions");
+        JFrame frame = new JFrame(Objects.requireNonNull(dataStructureBox.getSelectedItem()) + " Exam");
         frame.setSize(new Dimension(400, 250));
         frame.add(panel, BorderLayout.CENTER);
         frame.add(southPanel, BorderLayout.SOUTH);
@@ -284,7 +317,7 @@ public class UiLoader {
         HashMap<String, Boolean> options = bankOfQuestions.getBankQuestions().get(dataStructureType).get(actionType).get(currentQuestionIndex - 1).getOptions();
         for (HashMap.Entry<String, Boolean> option : options.entrySet()) {
             if (option.getKey().equals(selectedAnswer)) {
-                if (option.getValue().equals(true)) {
+                if (option.getValue()) {
                     this.correctAnswerNumber++;
                 }
                 break;
