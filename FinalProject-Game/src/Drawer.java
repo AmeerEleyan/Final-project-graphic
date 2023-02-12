@@ -1,18 +1,15 @@
 /**
- * author: Ameer Eleyan
- * ID: 1191076
+ * author: Ameer Eleyan, Mohammad AbuBader
+ * ID: 1191076, 1190478
  * created: 12/20/2022    1:26 PM
  */
 
 import DataStructure.*;
-import DataStructure.Point;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
 
-import java.awt.*;
-import java.util.HashSet;
 
 import static com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 
@@ -72,22 +69,27 @@ public class Drawer implements GLEventListener {
             gl.glLoadIdentity();
             switch (this.actionType) {
                 case INSERT_AT_FITST -> {
+                    this.linkedList.resetLinkedList();
                     this.linkedList.initialize();
                     this.linkedList.insertAtFirst();
                 }
                 case REMOVE_AT_FITST -> {
+                    this.linkedList.resetLinkedList();
                     this.linkedList.initialize();
                     this.linkedList.removeAtFirst();
                 }
                 case INSERT_AT_LAST -> {
+                    this.linkedList.resetLinkedList();
                     this.linkedList.initialize();
                     this.linkedList.insertAtLast();
                 }
                 case REMOVE_AT_LAST -> {
+                    this.linkedList.resetLinkedList();
                     this.linkedList.initialize();
                     this.linkedList.removeAtLast();
                 }
                 case INSERT_AT_MIDDLE -> {
+                    this.linkedList.resetLinkedList();
                     this.linkedList.initialize();
                     this.linkedList.insertBetween();
                 }
@@ -98,24 +100,4 @@ public class Drawer implements GLEventListener {
             }
         }
     }
-
-
-    private void fill(Color color, Polygon polygon, HashSet<DataStructure.Point> visitedPoints, int x, int y) {
-        DataStructure.Point p = new Point(x, y);
-        if (!visitedPoints.contains(p)) {
-            visitedPoints.add(p);
-            if (polygon.contains(x * 100, y * 100)) {
-
-                gl.glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
-                gl.glBegin(GL2.GL_POINTS);
-                gl.glVertex2f(x, y);
-                gl.glEnd();
-                fill(color, polygon, visitedPoints, x + 1, y);
-                fill(color, polygon, visitedPoints, x - 1, y);
-                fill(color, polygon, visitedPoints, x, y + 1);
-                fill(color, polygon, visitedPoints, x, y - 1);
-            }
-        }
-    }
-
 }

@@ -1,8 +1,9 @@
 /**
- * @author: Ameer Eleyan
- * ID: 1191076
+ * @author: Ameer Eleyan, Mohammad AbuBader
+ * ID: 1191076, 1190478
  * @created: 1/30/2023    8:09 PM
  */
+
 package DataStructure;
 
 import com.jogamp.opengl.GL2;
@@ -28,17 +29,16 @@ public class Node {
     }
 
     public void draw() {
-        this.gl.glColor3f(color.getRed() / 256f,
-                color.getGreen() / 256f, color.getBlue() / 256f);
+        this.gl.glColor3f(color.getRed() / 256f, color.getGreen() / 256f, color.getBlue() / 256f);
         this.midPoint();
         if (this.direction != null) {
             if (this.direction == DIRECTION.RIGHT)
-                new Pointer(gl, new Point(this.center.x() + 5, this.center.y()), Color.blue, this.direction);
+                new Pointer(gl, new Point(this.center.x() + 5, this.center.y()), Color.GREEN, this.direction);
             else if (this.direction == DIRECTION.LEFT)
-                new Pointer(gl, new Point(this.center.x() - 5, this.center.y()), Color.blue, this.direction);
+                new Pointer(gl, new Point(this.center.x() - 5, this.center.y()), Color.GREEN, this.direction);
             else if (this.direction == DIRECTION.TOP)
-                new Pointer(gl, new Point(this.center.x(), this.center.y() + 5), Color.blue, this.direction);
-            else new Pointer(gl, new Point(this.center.x(), this.center.y() - 5), Color.blue, this.direction);
+                new Pointer(gl, new Point(this.center.x(), this.center.y() + 5), Color.GREEN, this.direction);
+            else new Pointer(gl, new Point(this.center.x(), this.center.y() - 5), Color.GREEN, this.direction);
         }
         TextRenderer renderer = new TextRenderer(new Font("Times New Roman", Font.BOLD, 52));
         renderer.beginRendering(1000, 1000);
@@ -84,5 +84,9 @@ public class Node {
         gl.glVertex2f(cx + y, cy - x);
         gl.glVertex2f(cx - y, cy - x);
         gl.glEnd();
+    }
+
+    public int getValue() {
+        return Integer.parseInt(value);
     }
 }

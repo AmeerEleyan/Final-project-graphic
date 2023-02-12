@@ -8,6 +8,7 @@ package DataStructure;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.FPSAnimator;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Stack {
@@ -31,7 +32,6 @@ public class Stack {
         this.yMoveHead = 15;
         this.animator = animator;
         this.stack = new java.util.Stack<>();
-        //this.node = new Node(gl, new Point(50, 90), Color.WHITE, null);
         this.drawContainer();
     }
 
@@ -40,7 +40,13 @@ public class Stack {
         if (this.headPoint != null) {
             this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
         }
-        if (this.stack.size() >= 4) return;
+        if (!this.stack.isEmpty() && this.stack.peek().getCenter().y() == 75) {
+            JOptionPane.showMessageDialog(null,
+                    "New node out of range, please reset view"
+                    , "Warning Message", JOptionPane.WARNING_MESSAGE);
+            this.animator.pause();
+            return;
+        }
         if (this.yNodePush >= ((this.stack.isEmpty()) ? 15 : this.stack.peek().getCenter().y() + 20)) {
             this.node = new Node(this.gl, this.stack.size() + 1 + "", new Point(50, this.yNodePush--), Color.WHITE, null);
             this.node.draw();
@@ -62,20 +68,28 @@ public class Stack {
                     this.stack.push(this.node);
                     this.yNodePush = 90;
                     this.head = new Pointer(this.gl, "Head", this.headPoint, Color.MAGENTA, DIRECTION.RIGHT);
-                    if (this.stack.size() == 4) {
-                        this.animator.pause();
-                    }
+                    this.animator.pause();
                 }
             }
         }
     }
 
     public void pop() {
+        if (this.stack.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Can't pop, the stack is empty"
+                    , "Warning Message", JOptionPane.WARNING_MESSAGE);
+            this.animator.pause();
+            return;
+        }
         this.drawCurrentStack();
-        if (this.stack.isEmpty()) return;
+
         Node temp = this.stack.pop();
         if (this.stack.isEmpty()) {
             this.headPoint = null;
+            this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+            this.gl.glLoadIdentity();
+            this.animator.pause();
             return;
         }
         int y = this.stack.peek().getCenter().y();

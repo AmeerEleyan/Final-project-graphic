@@ -1,10 +1,10 @@
-package DataStructure;
-
 /**
  * author: Ameer Eleyan
  * ID: 1191076
  * created: 12/20/2022    1:55 PM
  */
+
+package DataStructure;
 
 public record Point(int x, int y) {
     /**
@@ -12,8 +12,7 @@ public record Point(int x, int y) {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Point)
-            return this.x == ((Point) obj).x && this.y == ((Point) obj).y;
+        if (obj instanceof Point) return this.x == ((Point) obj).x && this.y == ((Point) obj).y;
         return false;
     }
 }

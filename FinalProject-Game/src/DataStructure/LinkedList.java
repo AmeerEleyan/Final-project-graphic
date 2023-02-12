@@ -1,3 +1,9 @@
+/**
+ * author: Ameer Eleyan, Mohammad AbuBader
+ * ID: 1191076, 1190478
+ * created: 1/31/2023    10:58 AM
+ */
+
 package DataStructure;
 
 import com.jogamp.opengl.GL2;
@@ -5,17 +11,10 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 import java.awt.*;
 
-
-/**
- * author: Ameer Eleyan
- * ID: 1191076
- * created: 1/31/2023    10:58 AM
- */
-
 public class LinkedList {
     private final GL2 gl;
 
-    private final java.util.LinkedList<Node> linkedList;
+    private java.util.LinkedList<Node> linkedList;
 
     private Pointer head, tail;
 
@@ -30,21 +29,22 @@ public class LinkedList {
     private final FPSAnimator animator;
 
 
-    public LinkedList(GL2 gl, FPSAnimator animator) {
-        this.gl = gl;
-        this.animator = animator;
-
+    public void resetLinkedList() {
         this.linkedList = new java.util.LinkedList<>();
 
         this.linkedList.add(new Node(gl, "2", new Point(30, Y_POSITION), Color.WHITE, DIRECTION.RIGHT));
         this.linkedList.add(new Node(gl, "3", new Point(50, Y_POSITION), Color.WHITE, DIRECTION.RIGHT));
         this.linkedList.add(new Node(gl, "4", new Point(70, Y_POSITION), Color.WHITE, null));
 
-        //15 => radius(5)+pointer length(10)
-        headPoint = new Point(30, Y_POSITION + 15);
-        tailPoint = new Point(70, Y_POSITION + 15);
+    }
 
-        // this.initialize();
+    public LinkedList(GL2 gl, FPSAnimator animator) {
+        this.gl = gl;
+        this.animator = animator;
+
+        this.resetLinkedList();
+        this.headPoint = new Point(30, Y_POSITION + 15);
+        this.tailPoint = new Point(70, Y_POSITION + 15);
     }
 
     public void insertAtFirst() {
@@ -52,7 +52,7 @@ public class LinkedList {
         newNode.draw();
         if (this.xMoveFirst < 15) {
             this.xMoveFirst += 1;
-            new Pointer(gl, new Point(xMoveFirst, Y_POSITION), Color.blue, DIRECTION.RIGHT);
+            new Pointer(gl, new Point(xMoveFirst, Y_POSITION), Color.GREEN, DIRECTION.RIGHT);
         } else {
             newNode = new Node(gl, "1", new Point(10, Y_POSITION), Color.WHITE, DIRECTION.RIGHT);
             newNode.draw();
@@ -145,9 +145,9 @@ public class LinkedList {
         newNode.draw();
         if (this.xMoveLast < 75) {
             this.xMoveLast += 1;
-            new Pointer(gl, new Point(xMoveLast, Y_POSITION), Color.blue, DIRECTION.RIGHT);
+            new Pointer(gl, new Point(xMoveLast, Y_POSITION), Color.GREEN, DIRECTION.RIGHT);
         } else {
-            new Pointer(gl, new Point(xMoveLast, Y_POSITION), Color.blue, DIRECTION.RIGHT);
+            new Pointer(gl, new Point(xMoveLast, Y_POSITION), Color.GREEN, DIRECTION.RIGHT);
             if (this.tail.getStartPoint().x() < 90) {
                 this.tailPoint = new Point(this.tail.getStartPoint().x() + 1, this.tail.getStartPoint().y());
             } else {

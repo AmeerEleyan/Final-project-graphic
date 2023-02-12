@@ -1,6 +1,6 @@
 /**
- * author: Ameer Eleyan
- * ID: 1191076
+ * author: Ameer Eleyan, Mohammad AbuBader
+ * ID: 1191076, 1190478
  * created: 1/31/2023    8:20 PM
  */
 package DataStructure;
@@ -8,6 +8,7 @@ package DataStructure;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.FPSAnimator;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Queue {
@@ -37,16 +38,23 @@ public class Queue {
 
     public void enqueue() {
         this.queue.forEach(Node::draw);
+
         if (this.headPoint != null) {
             new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
         }
         if (!this.queue.isEmpty() && this.tailPoint != null) {
             new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
         }
-        if (this.queue.size() > 4)
+        if (!this.queue.isEmpty() && this.queue.getLast().getCenter().x() == 11) {
+            JOptionPane.showMessageDialog(null,
+                    "New node out of range, please reset view"
+                    , "Warning Message", JOptionPane.WARNING_MESSAGE);
+            this.animator.pause();
             return;
+        }
         if (xMoveEnqueue <= xTail) {
-            node = new Node(gl, this.queue.size() + 1 + "", new Point(++xMoveEnqueue, Y_POSITION), Color.WHITE, null);
+            int val = (this.queue.isEmpty()) ? 1 : (this.queue.getLast().getValue() + 1);
+            node = new Node(gl, val + "", new Point(++xMoveEnqueue, Y_POSITION), Color.WHITE, null);
             node.draw();
         } else {
             node.draw();
@@ -61,7 +69,7 @@ public class Queue {
                     this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
                 }
                 this.queue.add(node);
-                xMoveEnqueue = 10;
+                xMoveEnqueue = 2;
                 xTail -= 20;
                 this.animator.pause();
             } else {
@@ -71,7 +79,7 @@ public class Queue {
                     this.tailPoint = new Point(this.tailPoint.x() - 1, Y_POSITION + 15);
                 } else {
                     this.queue.add(node);
-                    xMoveEnqueue = 10;
+                    xMoveEnqueue = 2;
                     xTail -= 20;
                     this.animator.pause();
                 }
@@ -79,16 +87,28 @@ public class Queue {
         }
     }
 
+
     public void dequeue() {
+        if (this.queue.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Can't dequeue, the queue is empty"
+                    , "Warning Message", JOptionPane.WARNING_MESSAGE);
+            gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+            gl.glLoadIdentity();
+            this.animator.pause();
+            return;
+        }
+
         this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
         this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
         this.queue.forEach(Node::draw);
-        if (this.queue.isEmpty()) return;
+
         Node temp = this.queue.poll();
         if (this.queue.isEmpty()) {
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             gl.glLoadIdentity();
             this.animator.pause();
+            restQueue();
         } else {
             int nextNode = this.queue.peek().getCenter().x();
             this.queue.addFirst(temp);
@@ -100,11 +120,25 @@ public class Queue {
                 this.queue.poll();
                 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
                 gl.glLoadIdentity();
-                this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
-                this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
-                this.queue.forEach(Node::draw);
+                if (!this.queue.isEmpty()) {
+                    this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
+                    this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+                    this.queue.forEach(Node::draw);
+                } else {
+                    restQueue();
+                }
             }
         }
+    }
+
+    private void restQueue() {
+        this.xTail = 90;
+        this.xMoveEnqueue = 5;
+        this.node = null;
+        this.head = null;
+        this.tail = null;
+        this.tailPoint = new Point(xTail, Y_POSITION + 15);
+        this.headPoint = null;
     }
 
 }

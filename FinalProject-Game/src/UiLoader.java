@@ -1,3 +1,9 @@
+/**
+ * author: Mohammad AbuBader, Ameer Eleyan
+ * ID: 1190478, 1191076
+ * created: 2/12/2023    8:26 PM
+ */
+
 import DataStructure.ACTION;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
@@ -115,7 +121,7 @@ public class UiLoader {
         GLCapabilities capabilities = new GLCapabilities(profile);
         GLCanvas glcanvas = new GLCanvas(capabilities);
         glcanvas.addGLEventListener(drawer);
-        glcanvas.setSize(1000, (int) (this.screenSize.getHeight() - 90));
+        glcanvas.setSize(1100, (int) (this.screenSize.getHeight() - 90));
 
         comboPanel.setSize(new Dimension(100, 50));
 
@@ -291,6 +297,10 @@ public class UiLoader {
         if (str.equals("Linked list")) {
             comboBox.removeAllItems();
             comboBox.addItem("Insert at first");
+            comboBox.addItem("Insert at last");
+            comboBox.addItem("Insert at middle");
+            comboBox.addItem("Remove first");
+            comboBox.addItem("Remove last");
             if (this.counterOfLinkedList == 2)
                 comboBox.addItem("Insert at last");
             else if (this.counterOfLinkedList == 3 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert last"))
@@ -304,11 +314,13 @@ public class UiLoader {
         } else if (str.equals("Stack")) {
             comboBox.removeAllItems();
             comboBox.addItem("Push");
+            comboBox.addItem("Pop");
             if (this.counterOfStack == 1)
                 comboBox.addItem("Pop");
         } else {
             comboBox.removeAllItems();
             comboBox.addItem("Enqueue");
+            comboBox.addItem("Dequeue");
             if (this.counterOfQueue == 1)
                 comboBox.addItem("Dequeue");
         }
