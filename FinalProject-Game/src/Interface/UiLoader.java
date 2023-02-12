@@ -40,9 +40,10 @@ public class UiLoader {
     private FPSAnimator animator;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private final BankOfQuestions bankOfQuestions = new BankOfQuestions();
+    private BankOfQuestions bankOfQuestions;
     private final Font font = new Font("Serif", Font.BOLD, 16);
     private Drawer drawer;
+    private JFrame mainFrame;
 
     public static void main(String[] args) {
         Runnable runnable = () -> new UiLoader().initialization();
@@ -50,6 +51,7 @@ public class UiLoader {
     }
 
     private void initialization() {
+        bankOfQuestions = new BankOfQuestions();
         runButton = createButton("Run");
         takeExamButton = createButton("Take exam");
         JPanel comboPanel = new JPanel(new GridBagLayout());
@@ -69,8 +71,8 @@ public class UiLoader {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.ipady = 20;
-        dataStructureBox.setPrototypeDisplayValue("Insert at first  ");
-        comboPanel.add(dataStructureBox, gridBagConstraints);
+        this.dataStructureBox.setPrototypeDisplayValue("Insert at first  ");
+        comboPanel.add(this.dataStructureBox, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = -1;
@@ -82,17 +84,17 @@ public class UiLoader {
         gridBagConstraints.gridy = -1;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.ipady = 20;
-        actionBox.setPrototypeDisplayValue("Insert at first  ");
+        this.actionBox.setPrototypeDisplayValue("Insert at first  ");
 
         fillComboBoxAction(Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString(), this.actionBox);
-        dataStructureBox.setSelectedIndex(0);
-        actionBox.setSelectedIndex(0);
-        dataStructureBox.addActionListener(ae -> {
+        this.dataStructureBox.setSelectedIndex(0);
+        this.actionBox.setSelectedIndex(0);
+        this.dataStructureBox.addActionListener(ae -> {
             fillComboBoxAction(Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString(), this.actionBox);
             takeExamButton.setEnabled(false);
         });
 
-        comboPanel.add(actionBox, gridBagConstraints);
+        comboPanel.add(this.actionBox, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = -1;
@@ -144,14 +146,16 @@ public class UiLoader {
         glcanvas.addGLEventListener(drawer);
         glcanvas.setSize(1100, (int) (this.screenSize.getHeight() - 90));
 
-        actionBox.addActionListener(e -> {
+        this.actionBox.addActionListener(e -> {
             takeExamButton.setEnabled(false);
             if (Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString().equals("Linked list")) {
-                if (this.drawer != null) {
-                    this.animator.resume();
-                    this.drawer.setActionType(null);
-                    this.drawer.restLinkedList();
-                    glcanvas.revalidate();
+                if (Objects.requireNonNull(this.actionBox.getSelectedItem()).toString().equals("Insert at middle")) {
+                    if (this.drawer != null) {
+                        this.animator.resume();
+                        this.drawer.setActionType(null);
+                        this.drawer.restLinkedList();
+                        glcanvas.revalidate();
+                    }
                 }
             }
         });
@@ -165,16 +169,16 @@ public class UiLoader {
         container.add(glcanvas, BorderLayout.WEST);
 
 
-        JFrame frame = new JFrame("Data structure");
-        frame.getContentPane().add(container);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(1300, 800));
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
+        this.mainFrame = new JFrame("Data structure");
+        this.mainFrame.getContentPane().add(container);
+        this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.mainFrame.setSize(new Dimension(1300, 800));
+        this.mainFrame.setVisible(true);
+        this.mainFrame.setResizable(false);
+        this.mainFrame.setLocationRelativeTo(null);
         int fbsSpeed = 20;
         this.animator = new FPSAnimator(glcanvas, fbsSpeed, true);
-        drawer.setAnimator(animator);
+        this.drawer.setAnimator(animator);
     }
 
     private void run() {
@@ -250,26 +254,6 @@ public class UiLoader {
         ArrayList<Question> questions = bankOfQuestions.getBankQuestions().get(dataStructureType).get(actionType);
         fillQuestionAnswers(questions);
         nextButton.setEnabled(false);
-        nextButton.addActionListener(e -> {
-            if (currentQuestionIndex != questions.size()) {
-                fillQuestionAnswers(questions);
-            } else {
-                nextButton.setText("Finish");
-                JOptionPane.showMessageDialog(null, "Your Score is " + correctAnswerNumber);
-                currentQuestionIndex = 0;
-                if (correctAnswerNumber == 3) {
-                    if (dataStructureType.equals("Linked list") && counterOfLinkedList < 5)
-                        counterOfLinkedList++;
-                    else if (dataStructureType.equals("Stack") && counterOfStack < 1)
-                        counterOfStack++;
-                    else if (dataStructureType.equals("Queue") && counterOfQueue < 1)
-                        counterOfQueue++;
-
-                    fillComboBoxAction(dataStructureType, actionBox);
-                    correctAnswerNumber = 0;
-                }
-            }
-        });
 
         answer1.addActionListener(e -> {
             String selectedAnswer = answer1.getActionCommand();
@@ -301,6 +285,31 @@ public class UiLoader {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setResizable(false);
+        this.mainFrame.setEnabled(false);
+
+        nextButton.addActionListener(e -> {
+            if (currentQuestionIndex == questions.size() - 1) {
+                nextButton.setText("Finish");
+                fillQuestionAnswers(questions);
+            } else if (currentQuestionIndex < questions.size()) {
+                fillQuestionAnswers(questions);
+            } else {
+                this.mainFrame.setEnabled(true);
+                frame.dispose();
+                JOptionPane.showMessageDialog(null, "Your Score is " + correctAnswerNumber);
+                currentQuestionIndex = 0;
+                if (correctAnswerNumber == 3) {
+                    if (dataStructureType.equals("Linked list") && counterOfLinkedList < 5) counterOfLinkedList++;
+                    else if (dataStructureType.equals("Stack") && counterOfStack < 1) counterOfStack++;
+                    else if (dataStructureType.equals("Queue") && counterOfQueue < 1) counterOfQueue++;
+
+                    fillComboBoxAction(dataStructureType, actionBox);
+                    correctAnswerNumber = 0;
+                }
+            }
+            answerGroup.clearSelection();
+
+        });
     }
 
     private void fillQuestionAnswers(ArrayList<Question> questions) {
@@ -334,28 +343,24 @@ public class UiLoader {
             comboBox.addItem("Insert at middle");
             comboBox.addItem("Remove first");
             comboBox.addItem("Remove last");
-            if (this.counterOfLinkedList == 2)
-                comboBox.addItem("Insert at last");
+            if (this.counterOfLinkedList == 2) comboBox.addItem("Insert at last");
             else if (this.counterOfLinkedList == 3 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert last"))
                 comboBox.addItem("Insert at middle");
             else if (this.counterOfLinkedList == 4 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert middle"))
                 comboBox.addItem("Remove first");
             else if (this.counterOfLinkedList == 5 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Remove first"))
                 comboBox.addItem("Remove last");
-            if (comboBox.getItemCount() < counterOfLinkedList)
-                counterOfLinkedList--;
+            if (comboBox.getItemCount() < counterOfLinkedList) counterOfLinkedList--;
         } else if (str.equals("Stack")) {
             comboBox.removeAllItems();
             comboBox.addItem("Push");
             comboBox.addItem("Pop");
-            if (this.counterOfStack == 1)
-                comboBox.addItem("Pop");
+            if (this.counterOfStack == 1) comboBox.addItem("Pop");
         } else {
             comboBox.removeAllItems();
             comboBox.addItem("Enqueue");
             comboBox.addItem("Dequeue");
-            if (this.counterOfQueue == 1)
-                comboBox.addItem("Dequeue");
+            if (this.counterOfQueue == 1) comboBox.addItem("Dequeue");
         }
 
     }

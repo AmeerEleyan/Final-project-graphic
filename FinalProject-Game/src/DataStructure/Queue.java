@@ -96,6 +96,7 @@ public class Queue {
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
             gl.glLoadIdentity();
             this.animator.pause();
+            this.handleResetButtons();
             return;
         }
 
