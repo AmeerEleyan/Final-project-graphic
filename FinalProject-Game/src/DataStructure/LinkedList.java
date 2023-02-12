@@ -78,6 +78,16 @@ public class LinkedList {
     }
 
     public void removeAtFirst() {
+        if (this.linkedList.size() == 1) {
+            this.linkedList.removeFirst();
+            this.headPoint = null;
+            this.tailPoint = null;
+            this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+            this.gl.glLoadIdentity();
+            this.animator.pause();
+            this.handleResetButtons();
+            return;
+        }
         if (this.linkedList.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Can't remove, the linked list is empty", "Warning Message", JOptionPane.WARNING_MESSAGE);
             this.animator.pause();
@@ -191,6 +201,14 @@ public class LinkedList {
     }
 
     public void removeAtLast() {
+        if (this.linkedList.size() == 1) {
+            this.linkedList.removeFirst();
+            this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+            this.gl.glLoadIdentity();
+            this.animator.pause();
+            this.handleResetButtons();
+            return;
+        }
         if (this.linkedList.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Can't remove, the linked list is empty", "Warning Message", JOptionPane.WARNING_MESSAGE);
             this.animator.pause();
@@ -230,7 +248,8 @@ public class LinkedList {
 
     public void initialize() {
         this.linkedList.forEach(Node::draw);
-        this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
-        this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
+        if (this.headPoint != null) this.head = new Pointer(gl, "Head", this.headPoint, Color.CYAN, DIRECTION.BOTTOM);
+        if (this.tailPoint != null)
+            this.tail = new Pointer(gl, "Tail", this.tailPoint, Color.MAGENTA, DIRECTION.BOTTOM);
     }
 }

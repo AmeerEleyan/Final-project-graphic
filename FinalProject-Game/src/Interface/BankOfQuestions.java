@@ -43,7 +43,7 @@ public class BankOfQuestions {
         questionThreeOptions.put("C- A+B", false);
 
         ArrayList<Question> questions = new ArrayList<>();
-        questions.add(new Question(START_TAG + "You have linked list of char's: g->t->e.<br>If we apply \"Insert at first\" to add 'r'.<br>The linked list will be?<br>" + END_TAG, questionOneOptions));
+        questions.add(new Question(START_TAG + "You have linked list of char's: g->t->e.<br>If we apply \"Insert at first\" to add 'r'.The linked list will be?<br>" + END_TAG, questionOneOptions));
         questions.add(new Question(START_TAG + "What is the time complexity of the<br>\"Insert at first\" operation in a linked list?<br>" + END_TAG, questionTwoOptions));
         questions.add(new Question(START_TAG + "Is linked list sequential or random?<br>" + END_TAG, questionThreeOptions));
 
@@ -88,8 +88,8 @@ public class BankOfQuestions {
         questionTwoOptionsL.put("C- A+B", true);
 
         HashMap<String, Boolean> questionThreeOptionsL = new HashMap<>();
-        questionThreeOptionsL.put("A- 0", true);
-        questionThreeOptionsL.put("B- 1", false);
+        questionThreeOptionsL.put("A- 0", false);
+        questionThreeOptionsL.put("B- 1", true);
         questionThreeOptionsL.put("C- 2", false);
 
         ArrayList<Question> questionsL = new ArrayList<>();
@@ -180,7 +180,7 @@ public class BankOfQuestions {
         questionOneOptions.put("C- Linear tree", false);
 
         questionTwoOptions = new HashMap<>();
-        questionTwoOptions.put("A- Because we need just access the next node by'next pointer of the top node'", true);
+        questionTwoOptions.put(START_TAG + "A- Because we need just access the next node<br>by 'next pointer of the top node'" + END_TAG, true);
         questionTwoOptions.put("B- No,it's O(n)", false);
         questionTwoOptions.put("C- Because we need the access for all nodes", false);
 

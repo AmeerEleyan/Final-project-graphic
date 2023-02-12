@@ -17,6 +17,7 @@ import java.awt.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 
 
@@ -148,13 +149,17 @@ public class UiLoader {
 
         this.actionBox.addActionListener(e -> {
             takeExamButton.setEnabled(false);
-            if (Objects.requireNonNull(this.dataStructureBox.getSelectedItem()).toString().equals("Linked list")) {
-                if (Objects.requireNonNull(this.actionBox.getSelectedItem()).toString().equals("Insert at middle")) {
-                    if (this.drawer != null) {
-                        this.animator.resume();
-                        this.drawer.setActionType(null);
-                        this.drawer.restLinkedList();
-                        glcanvas.revalidate();
+            if (this.dataStructureBox.getSelectedItem() != null && this.actionBox.getSelectedItem() != null) {
+                if (this.dataStructureBox.getSelectedItem().toString().equals("Linked list")) {
+                    if (this.actionBox.getSelectedItem().toString().equals("Insert at middle")
+                            || this.actionBox.getSelectedItem().toString().equals("Insert at first")
+                            || this.actionBox.getSelectedItem().toString().equals("Insert at last")) {
+                        if (this.drawer != null) {
+                            this.animator.resume();
+                            this.drawer.setActionType(null);
+                            this.drawer.restLinkedList();
+                            glcanvas.revalidate();
+                        }
                     }
                 }
             }
@@ -211,6 +216,7 @@ public class UiLoader {
 
     private void takeExamWindow() {
         currentQuestionIndex = 0;
+        correctAnswerNumber = 0;
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -282,7 +288,7 @@ public class UiLoader {
         southPanel.add(nextButton, BorderLayout.EAST);
 
         JFrame frame = new JFrame(Objects.requireNonNull(dataStructureBox.getSelectedItem()) + " Exam");
-        frame.setSize(new Dimension(500, 250));
+        frame.setSize(new Dimension(400, 250));
         frame.add(panel, BorderLayout.CENTER);
         frame.add(southPanel, BorderLayout.SOUTH);
         frame.setLocationRelativeTo(null);
@@ -337,19 +343,26 @@ public class UiLoader {
         }
     }
 
+    final HashSet<String> linkedListActions = new HashSet<>();
+
     private void fillComboBoxAction(String str, JComboBox<String> comboBox) {
 
         if (str.equals("Linked list")) {
+
+            linkedListActions.add("Insert at first");
+            if (this.counterOfLinkedList == 2) {
+                linkedListActions.add("Remove first");
+            } else if (this.counterOfLinkedList == 3 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Remove first")) {
+                linkedListActions.add("Insert at middle");
+            } else if (this.counterOfLinkedList == 4 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert at middle")) {
+                linkedListActions.add("Insert at last");
+            } else if (this.counterOfLinkedList == 5 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert at last")) {
+                linkedListActions.add("Remove last");
+            }
             comboBox.removeAllItems();
-            comboBox.addItem("Insert at first");
-            if (this.counterOfLinkedList == 2) comboBox.addItem("Remove first");
-            else if (this.counterOfLinkedList == 3 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Remove first"))
-                comboBox.addItem("Insert at middle");
-            else if (this.counterOfLinkedList == 4 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert at middle"))
-                comboBox.addItem("Insert at last");
-            else if (this.counterOfLinkedList == 5 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert at last"))
-                comboBox.addItem("Remove last");
+            linkedListActions.forEach(comboBox::addItem);
             if (comboBox.getItemCount() < counterOfLinkedList) counterOfLinkedList--;
+
         } else if (str.equals("Stack")) {
             comboBox.removeAllItems();
             comboBox.addItem("Push");
@@ -365,7 +378,7 @@ public class UiLoader {
     private JLabel createLabel(String lbl) {
         JLabel label = new JLabel(lbl);
         label.setHorizontalAlignment(JLabel.LEFT);
-        label.setPreferredSize(new Dimension(120, 40));
+        label.setPreferredSize(new Dimension(120, 60));
         label.setFont(font);
         label.setForeground(Color.BLACK);
         return label;
