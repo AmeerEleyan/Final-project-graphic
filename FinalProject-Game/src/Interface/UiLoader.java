@@ -210,7 +210,7 @@ public class UiLoader {
 
 
     private void takeExamWindow() {
-
+        currentQuestionIndex = 0;
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -224,6 +224,7 @@ public class UiLoader {
         answer1 = new JRadioButton();
         answer1.setFont(font);
         answer1.setForeground(Color.BLACK);
+        answer1.setPreferredSize(new Dimension(150, 40));
         constraints.gridx = 0;
         constraints.gridy = 1;
         panel.add(answer1, constraints);
@@ -231,6 +232,7 @@ public class UiLoader {
         answer2 = new JRadioButton();
         answer2.setFont(font);
         answer2.setForeground(Color.BLACK);
+        answer2.setPreferredSize(new Dimension(150, 40));
         constraints.gridx = 0;
         constraints.gridy = 2;
         panel.add(answer2, constraints);
@@ -238,6 +240,7 @@ public class UiLoader {
         answer3 = new JRadioButton();
         answer3.setFont(font);
         answer3.setForeground(Color.BLACK);
+        answer3.setPreferredSize(new Dimension(150, 40));
         constraints.gridx = 0;
         constraints.gridy = 3;
         panel.add(answer3, constraints);
@@ -279,7 +282,7 @@ public class UiLoader {
         southPanel.add(nextButton, BorderLayout.EAST);
 
         JFrame frame = new JFrame(Objects.requireNonNull(dataStructureBox.getSelectedItem()) + " Exam");
-        frame.setSize(new Dimension(400, 250));
+        frame.setSize(new Dimension(500, 250));
         frame.add(panel, BorderLayout.CENTER);
         frame.add(southPanel, BorderLayout.SOUTH);
         frame.setLocationRelativeTo(null);
@@ -339,27 +342,21 @@ public class UiLoader {
         if (str.equals("Linked list")) {
             comboBox.removeAllItems();
             comboBox.addItem("Insert at first");
-            comboBox.addItem("Insert at last");
-            comboBox.addItem("Insert at middle");
-            comboBox.addItem("Remove first");
-            comboBox.addItem("Remove last");
-            if (this.counterOfLinkedList == 2) comboBox.addItem("Insert at last");
-            else if (this.counterOfLinkedList == 3 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert last"))
+            if (this.counterOfLinkedList == 2) comboBox.addItem("Remove first");
+            else if (this.counterOfLinkedList == 3 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Remove first"))
                 comboBox.addItem("Insert at middle");
-            else if (this.counterOfLinkedList == 4 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert middle"))
-                comboBox.addItem("Remove first");
-            else if (this.counterOfLinkedList == 5 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Remove first"))
+            else if (this.counterOfLinkedList == 4 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert at middle"))
+                comboBox.addItem("Insert at last");
+            else if (this.counterOfLinkedList == 5 && Objects.requireNonNull(comboBox.getSelectedItem()).equals("Insert at last"))
                 comboBox.addItem("Remove last");
             if (comboBox.getItemCount() < counterOfLinkedList) counterOfLinkedList--;
         } else if (str.equals("Stack")) {
             comboBox.removeAllItems();
             comboBox.addItem("Push");
-            comboBox.addItem("Pop");
             if (this.counterOfStack == 1) comboBox.addItem("Pop");
         } else {
             comboBox.removeAllItems();
             comboBox.addItem("Enqueue");
-            comboBox.addItem("Dequeue");
             if (this.counterOfQueue == 1) comboBox.addItem("Dequeue");
         }
 
@@ -368,7 +365,7 @@ public class UiLoader {
     private JLabel createLabel(String lbl) {
         JLabel label = new JLabel(lbl);
         label.setHorizontalAlignment(JLabel.LEFT);
-        label.setPreferredSize(new Dimension(120, 20));
+        label.setPreferredSize(new Dimension(120, 40));
         label.setFont(font);
         label.setForeground(Color.BLACK);
         return label;
