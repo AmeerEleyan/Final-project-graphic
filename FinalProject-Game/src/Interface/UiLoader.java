@@ -151,9 +151,7 @@ public class UiLoader {
             takeExamButton.setEnabled(false);
             if (this.dataStructureBox.getSelectedItem() != null && this.actionBox.getSelectedItem() != null) {
                 if (this.dataStructureBox.getSelectedItem().toString().equals("Linked list")) {
-                    if (this.actionBox.getSelectedItem().toString().equals("Insert at middle")
-                            || this.actionBox.getSelectedItem().toString().equals("Insert at first")
-                            || this.actionBox.getSelectedItem().toString().equals("Insert at last")) {
+                    if (this.actionBox.getSelectedItem().toString().equals("Insert at middle") || this.actionBox.getSelectedItem().toString().equals("Insert at first") || this.actionBox.getSelectedItem().toString().equals("Insert at last")) {
                         if (this.drawer != null) {
                             this.animator.resume();
                             this.drawer.setActionType(null);
@@ -264,23 +262,11 @@ public class UiLoader {
         fillQuestionAnswers(questions);
         nextButton.setEnabled(false);
 
-        answer1.addActionListener(e -> {
-            String selectedAnswer = answer1.getActionCommand();
-            checkAnswer(selectedAnswer);
-            nextButton.setEnabled(true);
-        });
+        answer1.addActionListener(e -> nextButton.setEnabled(true));
 
-        answer2.addActionListener(e -> {
-            String selectedAnswer = answer2.getActionCommand();
-            checkAnswer(selectedAnswer);
-            nextButton.setEnabled(true);
-        });
+        answer2.addActionListener(e -> nextButton.setEnabled(true));
 
-        answer3.addActionListener(e -> {
-            String selectedAnswer = answer3.getActionCommand();
-            checkAnswer(selectedAnswer);
-            nextButton.setEnabled(true);
-        });
+        answer3.addActionListener(e -> nextButton.setEnabled(true));
 
 
         JPanel southPanel = new JPanel();
@@ -288,7 +274,7 @@ public class UiLoader {
         southPanel.add(nextButton, BorderLayout.EAST);
 
         JFrame frame = new JFrame(Objects.requireNonNull(dataStructureBox.getSelectedItem()) + " Exam");
-        frame.setSize(new Dimension(400, 250));
+        frame.setSize(new Dimension(450, 250));
         frame.add(panel, BorderLayout.CENTER);
         frame.add(southPanel, BorderLayout.SOUTH);
         frame.setLocationRelativeTo(null);
@@ -297,6 +283,17 @@ public class UiLoader {
         this.mainFrame.setEnabled(false);
 
         nextButton.addActionListener(e -> {
+            String selectedAnswer;
+            if (answer1.isSelected()) {
+                selectedAnswer = answer1.getActionCommand();
+            } else if (answer2.isSelected()) {
+                selectedAnswer = answer2.getActionCommand();
+            } else {
+                selectedAnswer = answer3.getActionCommand();
+            }
+
+            checkAnswer(selectedAnswer);
+
             if (currentQuestionIndex == questions.size() - 1) {
                 nextButton.setText("Finish");
                 fillQuestionAnswers(questions);
@@ -305,7 +302,7 @@ public class UiLoader {
             } else {
                 this.mainFrame.setEnabled(true);
                 frame.dispose();
-                JOptionPane.showMessageDialog(null, "Your Score is " + correctAnswerNumber);
+                JOptionPane.showMessageDialog(null, "Your Score is " + correctAnswerNumber + "\nGo to the next action");
                 currentQuestionIndex = 0;
                 if (correctAnswerNumber == 3) {
                     if (dataStructureType.equals("Linked list") && counterOfLinkedList < 5) counterOfLinkedList++;
